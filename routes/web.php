@@ -54,3 +54,4 @@ Route::get('/billerModule/listBillMerchant', [App\Http\Controllers\BillerControl
 //complaint/listComplaint
 
 Route::get('/complaint/listComplaint', [App\Http\Controllers\ComplaintController::class, 'complaint']);
+Route::post('/update_complaint', [App\Http\Controllers\ComplaintController::class, 'update']);

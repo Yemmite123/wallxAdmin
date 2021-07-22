@@ -35,11 +35,11 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-left">
                 <h1 class="flex-sm-fill h3 my-2">
-                    App User Module
+                    Complaint Module
                 </h1>
                 {{-- <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
-                        <li class="breadcrumb-item">Users</li>
+                        <li class="breadcrumb-item">complaints</li>
                         <li class="breadcrumb-item" aria-current="page">
                             <a class="link-fx" href="">List</a>
                         </li>
@@ -75,7 +75,7 @@
         <!-- Dynamic Table with Export Buttons -->
         <div class="block block-rounded ">
             <div class="block-header">
-                <h3 class="block-title"> App User Module</h3>
+                <h3 class="block-title"> Complain Module</h3>
                 {{-- <a class="btn btn-primary float-right" data-toggle="modal" data-target="#exampleModal">Add Admin User</a> --}}
             </div>
             <div class="block-content block-content-full">
@@ -93,50 +93,104 @@
                             <th class="text-center">MemberID</th>
                             <th class="text-center">Caseno</th>
                             <th class="text-center">Status</th>
+                            <th class="text-center">Action</th>
           
                         </tr>
                     </thead>
                     <tbody>
-                      @foreach ($complaint as $key=>$user)
+                      @foreach ($complaints as $key=>$complaint)
+                       
                         <tr>
                             <td class="text-center">{{ $key+1 }}</td>
                             <td class="text-center">
-                                @if ($user['logo'] == '')
-                                  <img class="img-avatar" style="height: 50px; width:50px" src="{{ asset('/media/avatars/avatar13.jpg')}}" alt="">
-                                @else
-                                  <img class="img-avatar" style="height: 50px; width:50px" src="{{$user['logo']}}" alt="">
-                                @endif
+                                <img class="img-avatar" style="height: 50px; width:50px" src="{{$complaint['logo'] ?? asset('/media/avatars/avatar13.jpg') }}" alt="">
+                                
                             </td>
                             <td class="text-center">
-                                {{$user['businessname']}}
+                                {{$complaint['businessname'] ?? 'Nill'}} 
                             </td>
 
                             <td class="text-center">
-                                {{$user['phonenumber']}}
+                                {{$complaint['phonenumber'] ?? 'Nill'}}
                             </td>
                             <td class="text-center">
-                                {{$user['emailaddress']}}
+                                {{$complaint['emailaddress'] ?? 'Nill' }}
                             </td>
                             <td class="text-center">
-                                {{$user['review']}}
+                                {{$complaint['review'] ?? 'Nill' }}
                             </td>
 
                             <td class="text-center">
-                               {{$user['reviewtype']}}
+                               {{$complaint['reviewtype'] ?? 'Nill' }}
                             </td>
                             <td class="text-center">
-                                {{$user['memberID']}}
+                                {{$complaint['memberID'] ?? 'Nill' }}
                             </td>
                             <td class="text-center">
-                                {{$user['caseno']}}
+                                {{$complaint['caseno'] ?? 'Nill' }}
                             </td>
                         
                             <td class="text-center">
-                                @if ($user['status'] == 'pending')
+                                @if ($complaint['status'] == 'pending')
                                  <p class="text-danger">Pending</p>
                               @else
                                  <p class="text-success">Active</p>
                               @endif
+                            </td>
+
+                            <td class="text-center">
+                                @php($updateID = 'update-status-'.$complaint['id'])
+                                <a class="btn btn-primary" data-toggle="modal" data-target="#{{$updateID}}">Update</a>
+                    
+
+                                <div class="modal fade" id="{{$updateID}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+
+                                        <div class="modal-content">
+
+                                            <form class="needs-validation" novalidate method="POST"  action="{{ url('update_complaint') }}">
+                                                @csrf 
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Edit {{$complaint['businessname'] ?? 'Nil'}}</h5>
+                                                    
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            
+                                                <div class="modal-body">
+                                                
+                                                    <input type="hidden" name="id" value="{{$complaint['id']}}">
+
+                                                    <div class="form-row">
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="validationCustom04">Status</label>
+                                                            <select class="custom-select" name="status" id="validationCustom04" required>
+                                                                <option value="Pending" {{strtolower($complaint['status']) == 'pending'? 'selected' : ''}}>Pending</option>
+                                                                <option value="Active" {{strtolower($complaint['status']) == 'active'? 'selected' : ''}}>Active</option>
+                                                            </select>
+                                                            <div class="invalid-feedback">
+                                                                Please select a status
+                                                            </div>
+
+                                                        </div>
+                                                    
+                                                    </div>
+                                                    
+                                            
+                                                </div>
+
+                                                <div class="mb-6">
+                                                    <button type="button" class="btn btn-secondary float-left ml-4 " data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary float-right mr-4">Save Changes</button>
+                                                </div>
+
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+  
                             </td>
                           
                             
