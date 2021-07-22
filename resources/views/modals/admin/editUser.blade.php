@@ -52,11 +52,11 @@
 
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <!-- <div class="col-md-6 mb-3">
                     <label for="validationCustom04"> Profile Picture </label>
                     <input type="file" class="form-control" name="adminprofilelink"  id="validationCustom02" ><small>{{$user['adminprofilelink']}}</small>
         
-                </div>
+                </div> -->
              
              
 
