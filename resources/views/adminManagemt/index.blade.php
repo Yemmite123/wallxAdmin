@@ -116,15 +116,18 @@
                                 {{$user['admingender']}}
                             </td>
                             <td>
+                                @php($editID = 'editUserWithId-'.$user['id'])
+                                @php($deleteID = 'deleteUserWithId-'.$user['id'])
                                 <div class="btn-group dropleft">
                                     <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
                                       action
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                                      <button class="dropdown-item text-center" type="button" data-toggle="modal" data-target="#changedAdminPassword">Edit</button>
+                                      <button class="dropdown-item text-center" type="button" data-toggle="modal" data-target="#{{$editID}}">Edit</button>
                                       <button class="dropdown-item text-center" type="button">Delete</button>
                                     </div>
-                                  </div>
+                                    @include('/modals.admin.editUser', ['user'=>$user, 'id'=>$editID])
+                                </div>
                             </td>
                         </tr>
                         @endforeach

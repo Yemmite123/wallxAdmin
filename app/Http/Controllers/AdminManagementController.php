@@ -147,7 +147,7 @@ class AdminManagementController extends Controller
         catch (ClientException $e) {
             $responseBody = $e->getResponse()->getBody()->getContents();
             $result = json_decode($responseBody);
-           dd($result);
+           //dd($result);
             return redirect()->route( 'welcome' )->with(['error'=> $result->message]);
         }
     
@@ -191,17 +191,24 @@ class AdminManagementController extends Controller
      */
     public function update(Request $request)
     {
-        //dd($request['adminfirstname']);
+        
         try {
+           
+            $data = [
+                'adminfirstname' => $request->get('adminfirstname'),
+                'adminlastname' => $request->get('adminlastname'),
+                'admingender' => $request->get('admingender'),
+                'id' => $request->get('adminid'),
+            ];
+
+            //if the user uploaded a file in the profile image add that to request data to be sent
+            if ($request->file('adminprofilelink')) {
+                $data['adminprofilelink'] = $request->file('adminprofilelink');
+            }
+
             $client = new Client(['verify' => false]);
             $res = $client->request('PUT', Controller::$TOP_URL.'/adminuser/', [
-                'form_params'=> [
-                    'adminfirstname' => $request->get('adminfirstname'),
-                    'adminlastname' => $request->get('adminlastname'),
-                    'admingender' => $request->get('admingender'),
-                    //'adminprofilelink' => '',
-                    'id' => session('id'),
-                ],
+                'form_params'=> $data,
                 'headers' => [
                     'Accept' => 'application/json',
                     'Authorization' => 'Bearer ' . session('token'),
@@ -210,22 +217,29 @@ class AdminManagementController extends Controller
  
             if ($res->getStatusCode() == 200) {
                 $response_data = $res->getBody();
+               
                 $result = json_decode($response_data,true);
-                //dd($result);
-                session([
-                    'id' => $result['data']['id'],
-                    'adminusername' => $result['data']['adminusername'],
-                    'adminfirstname' =>$result['data']['adminfirstname'],
-                    'adminlastname' => $result['data']['adminlastname'],
-                    'adminprofilelink' => $result['data']['adminprofilelink'],
-                    'adminrole' => $result['data']['adminrole'],
-                    'adminemailaddress' => $result['data']['adminemailaddress'],
-                    'adminphonenumber' => $result['data']['adminphonenumber'],
-                    // 'admindob' => $result['data']['admindob'],
-                    'admingender' => $result['data']['admingender'],
-                ]);
+                
+
+                // If the user is the loggedIn user then update with new updates
+                if ($result['status'] == true && $result['data']['id'] == session('id')) {
+                    session([
+                        'id' => $result['data']['id'],
+                        'adminusername' => $result['data']['adminusername'],
+                        'adminfirstname' =>$result['data']['adminfirstname'],
+                        'adminlastname' => $result['data']['adminlastname'],
+                        'adminprofilelink' => $result['data']['adminprofilelink'],
+                        'adminrole' => $result['data']['adminrole'],
+                        'adminemailaddress' => $result['data']['adminemailaddress'],
+                        'adminphonenumber' => $result['data']['adminphonenumber'],
+                        // 'admindob' => $result['data']['admindob'],
+                        'admingender' => $result['data']['admingender'],
+                    ]);
+                }
+                
                  return redirect()->back()->with(['message'=> $result['message']]);
             }
+            return redirect()->back()->with(['error'=> 'Request was not successful an unknown error occured']);
         }
         catch (ClientException $e) {
             if($e->getResponse()->getStatusCode() == 400)
@@ -237,10 +251,12 @@ class AdminManagementController extends Controller
             $status = 'false';
             $message = $re->getMessage();
             $data = [];
+            return redirect()->back()->with(['error'=> $re->getMessage()]);
          }catch(Exception $e){
             $this->status = 'false';
             $this->message = $e->getMessage();
             $data = [];
+            return redirect()->back()->with(['error'=> $e->getMessage()]);
          }
     }
 
