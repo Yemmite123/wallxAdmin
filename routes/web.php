@@ -30,6 +30,9 @@ Route::post('/admin_login', [App\Http\Controllers\AdminManagementController::cla
 Route::post('/update_admin', [App\Http\Controllers\AdminManagementController::class, 'update']);
 Route::post('/change_admin_password', [App\Http\Controllers\AdminManagementController::class, 'changePassword']);
 
+//Announcement
+Route::get('/pages/announcement', [App\Http\Controllers\AnnouncementController::class, 'index']);
+Route::post('/create_announcement', [App\Http\Controllers\AnnouncementController::class, 'store']);
 
 //Contribution
 
