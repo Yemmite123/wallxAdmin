@@ -93,9 +93,14 @@
                       <div id="collapse{{ $key+1 }}" class="collapse @if($key+1 == 1) show @endif" data-parent="#accordion">
                         <div class="card-body">
                           
-
-
-
+                            <div class="row">
+                                @foreach($biller['merchantbillinglist'] as $key=>$merchant)
+                                    <div class="col-2">
+                                        <img src="{{$merchant['logo']}}" class="img-responsive" width="51" height="51">
+                                        <div>{{$merchant['biller_name']}} ({{$merchant['merchantname']}})</div>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                       </div>
                     </div>
