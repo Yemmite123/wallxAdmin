@@ -25,7 +25,7 @@ trait ApiRequester
 
         if ($query) {
 
-            return $service->makeHttpQueryRequest($url, $method, $body)->retrieveResponse();
+            return $service->makeHttpQueryRequest($url, $method, $body);
         }
 
         return $service->makeHttpNonQueryRequest($url, $method, $body)->retrieveResponse();

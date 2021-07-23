@@ -40,6 +40,10 @@ Route::get('/pages/rotationalcontribution', [App\Http\Controllers\ContributionCo
 Route::get('/pages/quickcontribution', [App\Http\Controllers\ContributionController::class, 'quickcontribution']);
 Route::get('/pages/crowdfundingcontribution', [App\Http\Controllers\ContributionController::class, 'crowdfundingcontribution']);
 
+Route::get('/pages/contribution/transactions/{groupID}', [App\Http\Controllers\ContributionController::class, 'groupTransactions'])->name('contribution_transactions');
+Route::get('/pages/contribution/members/{groupID}', [App\Http\Controllers\ContributionController::class, 'groupMembers'])->name('contribution_members');
+Route::get('/pages/crowdfundingcontribution/members/{groupID}', [App\Http\Controllers\ContributionController::class, 'crowdfundingGroupMembers'])->name('crowdfunding_contribution_members');
+
 //listmerchant
 Route::get('/pages/listmerchant', [App\Http\Controllers\MerchantController::class, 'listmerchant']);
 
