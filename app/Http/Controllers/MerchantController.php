@@ -33,8 +33,8 @@ class MerchantController extends Controller
         catch (ClientException $e) {
             $responseBody = $e->getResponse()->getBody()->getContents();
             $result = json_decode($responseBody);
-           
-            return redirect()->route( 'welcome' )->with(['error'=> $result->message]);
+    
+            return redirect()->back()->with(['error'=> $result->message ?? $result->detail]);
         }
     }
 }
