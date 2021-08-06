@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -32,6 +34,11 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        //
+        $this->renderable(function (ServerException $e, $request) {
+            return redirect()->back()->with(['error'=> 'Network error occurred']);
+        });
+        $this->renderable(function (ConnectException $e, $request) {
+            return redirect()->back()->with(['error'=> 'Network error occurred']);
+        });
     }
 }

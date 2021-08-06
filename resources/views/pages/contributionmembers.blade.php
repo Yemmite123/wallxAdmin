@@ -35,11 +35,11 @@
         <div class="content content-full">
             <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-left">
                 <h1 class="flex-sm-fill h3 my-2">
-                    Admin Management 
+                    Contribution Members
                 </h1>
                 {{-- <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
-                        <li class="breadcrumb-item">Users</li>
+                        <li class="breadcrumb-item">Members</li>
                         <li class="breadcrumb-item" aria-current="page">
                             <a class="link-fx" href="">List</a>
                         </li>
@@ -75,8 +75,7 @@
         <!-- Dynamic Table with Export Buttons -->
         <div class="block block-rounded ">
             <div class="block-header">
-                <h3 class="block-title"> All Admin Users</h3>
-                <a class="btn btn-primary float-right" data-toggle="modal" data-target="#exampleModal">Add Admin User</a>
+                <h3 class="block-title"> All Contribution Members</h3>
             </div>
             <div class="block-content block-content-full">
                 <!-- DataTables init on table by adding .js-dataTable-buttons class, functionality is initialized in js/pages/tables_datatables.js -->
@@ -84,51 +83,26 @@
                     <thead>
                         <tr>
                             <th class="text-center">#</th>
-                            <th class="text-center">Name</th>
-                            <th class="text-center">Username</th>
-                            <th class="text-center">Email</th>
-                            <th class="text-center">Phone</th>
-                            <th class="text-center">DOB</th> 
-                            <th class="text-center">Gender</th>
-                            <th class="text-center">Actions</th>
+                            <th class="text-center">Business Name</th>
+                            <th class="text-center">Amount Contributed</th>
+                            <th class="text-center">Phone number</th>
+                            <th class="text-center">Email Address</th>
+                           
                         </tr>
                     </thead>
                     <tbody>
-                      @foreach ($users as $key=>$user)
+                      @foreach ($members as $key=>$member)
                         <tr>
                             <td class="text-center">{{ $key+1 }}</td>
-                            <td class="text-center">
-                               {{$user['adminfirstname']}} {{$user['adminlastname']}}
-                            </td>
-                            <td class="text-center">
-                                {{$user['adminusername']}}
-                             </td>
-                            <td class="text-center">
-                                {{$user['adminemailaddress']}}
-                            </td>
-                            <td class="text-center">
-                                {{$user['adminphonenumber']}}
-                            </td>
-                            <td class="text-center">
-                                {{$user['admindob']}}
-                            </td> 
-                            <td class="text-center">
-                                {{$user['admingender']}}
-                            </td>
-                            <td>
-                                @php($editID = 'editUserWithId-'.$user['id'])
-                                @php($deleteID = 'deleteUserWithId-'.$user['id'])
-                                <div class="btn-group dropleft">
-                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                                      action
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                                      <button class="dropdown-item text-center" type="button" data-toggle="modal" data-target="#{{$editID}}">Edit</button>
-                                      <button class="dropdown-item text-center" type="button">Delete</button>
-                                    </div>
-                                    @include('/modals.admin.editUser', ['user'=>$user, 'id'=>$editID])
-                                </div>
-                            </td>
+                            <th class="text-center">
+                                    @if(isset($member['logo']))
+                                        <img src="{{$member['logo']}}" class="img-responsive" width="51" height="51">
+                                    @endif
+                                    <div>{{$member['businessname']}}</div>
+                            </th>
+                            <th class="text-center">{{$member['amountcontributed']}}</th>
+                            <th class="text-center">{{$member['phonenumber']}}</th>
+                            <th class="text-center">{{$member['emailaddress']}}</th>
                         </tr>
                         @endforeach
                     </tbody>
@@ -138,9 +112,5 @@
         <!-- END Dynamic Table with Export Buttons -->
     </div>
     <!-- END Page Content -->
-  
-    @include('/modals.admin.addAdmin')
-
-    @include('/modals.admin.changedAdminPassword')
 
 @endsection

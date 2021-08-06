@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
 use Exception;
+use GuzzleHttp\Client;
+use Illuminate\Http\Request;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 
 class ContributionController extends Controller
 {
@@ -34,7 +36,7 @@ class ContributionController extends Controller
             $responseBody = $e->getResponse()->getBody()->getContents();
             $result = json_decode($responseBody);
            
-            return redirect()->route( 'welcome' )->with(['error'=> $result->message]);
+            return redirect()->back()->with(['error'=> $result->message]);
         }
     }
 
@@ -62,7 +64,7 @@ class ContributionController extends Controller
             $responseBody = $e->getResponse()->getBody()->getContents();
             $result = json_decode($responseBody);
            
-            return redirect()->route( 'welcome' )->with(['error'=> $result->message]);
+            return redirect()->back()->with(['error'=> $result->message]);
         }
     }
 
@@ -91,9 +93,80 @@ class ContributionController extends Controller
             $responseBody = $e->getResponse()->getBody()->getContents();
             $result = json_decode($responseBody);
            
-            return redirect()->route( 'welcome' )->with(['error'=> $result->message]);
+            $msg = is_null($result) ? 'Unknow Error': $result->message ?? $result->detail;
+            return  redirect()->back()->with(['error'=> $msg]);
         }
     }
+
+    public function groupTransactions(Request $request)
+    {
+        try {
+
+            $url = '/contributiontransactiondetails/';
+            $data = ['group_id'=> $request->groupID];
+            $transactions = $this->makeRequest($url, 'GET', $data, true)['data']['data'] ?? [];
+        
+            return view('pages.contributiontransactions')->with(
+                ['transactions'=>$transactions]
+            );
+            
+        }
+        catch (ClientException $e) {
+            $responseBody = $e->getResponse()->getBody()->getContents();
+            $result = json_decode($responseBody);
+            
+            return redirect()->back()->with(['error'=> $result->message ?? $result->detail]);
+        }catch(\Exception $e) {
+            return redirect()->back()->with(['error'=> $e->getMessage()]);
+        }
+    }
+
+    public function groupMembers(Request $request)
+    {
+        try {
+
+            $url = '/contributionmember/';
+            $data = ['group_id'=> $request->groupID];
+            $members = $this->makeRequest($url, 'GET', $data, true)['data'] ?? [];
+        
+            return view('pages.contributionmembers')->with(
+                ['members'=>$members]
+            );
+            
+        }
+        catch (ClientException $e) {
+            $responseBody = $e->getResponse()->getBody()->getContents();
+            $result = json_decode($responseBody);
+            
+            return redirect()->back()->with(['error'=> $result->message ?? $result->detail]);
+        }catch(\Exception $e) {
+            return redirect()->back()->with(['error'=> $e->getMessage()]);
+        }
+    }
+
+    public function crowdfundingGroupMembers(Request $request)
+    {
+        try {
+
+            $url = '/crowdfundingcontributionmember';
+            $data = ['group_id'=> $request->groupID];
+            $members = $this->makeRequest($url, 'GET', $data, true)['data'] ?? [];
+        
+            return view('pages.contributionmembers')->with(
+                ['members'=>$members]
+            );
+            
+        }
+        catch (ClientException $e) {
+            $responseBody = $e->getResponse()->getBody()->getContents();
+            $result = json_decode($responseBody);
+            $msg = is_null($result) ? 'Unknow Error': $result->message ?? $result->detail;
+            return  redirect()->back()->with(['error'=> $msg]);
+        }catch(\Exception $e) {
+            return redirect()->back()->with(['error'=> $e->getMessage()]);
+        }
+    }
+    
 
 }
 

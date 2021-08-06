@@ -25,9 +25,9 @@ class ComplaintController extends Controller
             if ($res->getStatusCode() == 200) {
                 $response_data = $res->getBody();
                 $result = json_decode($response_data,true);
-                $complaint = $result['data'];
-                //dd($complaint);
-                 return view('complaint.listComplaint')->with('complaint', $complaint);
+                $complaints = $result['data'];
+                
+                 return view('complaint.listComplaint')->with('complaints', $complaints);
             }
         }
         catch (ClientException $e) {
@@ -37,4 +37,36 @@ class ComplaintController extends Controller
             return redirect()->route( 'welcome' )->with(['error'=> $result->message]);
         }
     }
+
+    public function update(Request $request)
+    {
+        try {
+
+            $data = $request->only(['status', 'id']);
+
+            $client = new Client(['verify' => false]);
+            $res = $client->request('PUT', Controller::$TOP_URL.'/complaint/', [
+                'form_params'=> $data,
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . session('token'),
+                ],
+            ]);
+ 
+            if ($res->getStatusCode() == 200) {
+                $response_data = $res->getBody();
+                $result = json_decode($response_data,true);
+     
+                return redirect()->back()->with(['message'=> $result['maessage']]);
+            }
+        }
+        catch (ClientException $e) {
+            $responseBody = $e->getResponse()->getBody()->getContents();
+            $result = json_decode($responseBody);
+           
+            return redirect()->back()->with(['error'=> $result->message]);
+        }
+    }
+
+
 }

@@ -39,7 +39,7 @@
                 </h1>
                 {{-- <nav class="flex-sm-00-auto ml-sm-3" aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-alt">
-                        <li class="breadcrumb-item">Users</li>
+                        <li class="breadcrumb-item">Announcement</li>
                         <li class="breadcrumb-item" aria-current="page">
                             <a class="link-fx" href="">List</a>
                         </li>
@@ -75,8 +75,8 @@
         <!-- Dynamic Table with Export Buttons -->
         <div class="block block-rounded ">
             <div class="block-header">
-                <h3 class="block-title"> All Admin Users</h3>
-                <a class="btn btn-primary float-right" data-toggle="modal" data-target="#exampleModal">Add Admin User</a>
+                <h3 class="block-title"> All Announcements</h3>
+                <a class="btn btn-primary float-right" data-toggle="modal" data-target="#addAnnouncement">Create Announcement</a>
             </div>
             <div class="block-content block-content-full">
                 <!-- DataTables init on table by adding .js-dataTable-buttons class, functionality is initialized in js/pages/tables_datatables.js -->
@@ -84,50 +84,20 @@
                     <thead>
                         <tr>
                             <th class="text-center">#</th>
-                            <th class="text-center">Name</th>
-                            <th class="text-center">Username</th>
-                            <th class="text-center">Email</th>
-                            <th class="text-center">Phone</th>
-                            <th class="text-center">DOB</th> 
-                            <th class="text-center">Gender</th>
-                            <th class="text-center">Actions</th>
+                            <th class="text-center">Title</th>
+                            <th class="text-center" colspan="3">Body</th>
                         </tr>
                     </thead>
                     <tbody>
-                      @foreach ($users as $key=>$user)
+                      @foreach ($announcements as $key=>$announcement)
                         <tr>
                             <td class="text-center">{{ $key+1 }}</td>
+                           
                             <td class="text-center">
-                               {{$user['adminfirstname']}} {{$user['adminlastname']}}
-                            </td>
-                            <td class="text-center">
-                                {{$user['adminusername']}}
-                             </td>
-                            <td class="text-center">
-                                {{$user['adminemailaddress']}}
-                            </td>
-                            <td class="text-center">
-                                {{$user['adminphonenumber']}}
-                            </td>
-                            <td class="text-center">
-                                {{$user['admindob']}}
+                                {{$announcement['title']}}
                             </td> 
-                            <td class="text-center">
-                                {{$user['admingender']}}
-                            </td>
-                            <td>
-                                @php($editID = 'editUserWithId-'.$user['id'])
-                                @php($deleteID = 'deleteUserWithId-'.$user['id'])
-                                <div class="btn-group dropleft">
-                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" data-display="static" aria-haspopup="true" aria-expanded="false">
-                                      action
-                                    </button>
-                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left">
-                                      <button class="dropdown-item text-center" type="button" data-toggle="modal" data-target="#{{$editID}}">Edit</button>
-                                      <button class="dropdown-item text-center" type="button">Delete</button>
-                                    </div>
-                                    @include('/modals.admin.editUser', ['user'=>$user, 'id'=>$editID])
-                                </div>
+                            <td class="text-center" colspan="3">
+                                {{$announcement['body']}}
                             </td>
                         </tr>
                         @endforeach
@@ -139,8 +109,7 @@
     </div>
     <!-- END Page Content -->
   
-    @include('/modals.admin.addAdmin')
+    @include('/modals.admin.addAnnouncement')
 
-    @include('/modals.admin.changedAdminPassword')
 
 @endsection

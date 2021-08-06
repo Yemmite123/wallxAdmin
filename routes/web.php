@@ -30,12 +30,19 @@ Route::post('/admin_login', [App\Http\Controllers\AdminManagementController::cla
 Route::post('/update_admin', [App\Http\Controllers\AdminManagementController::class, 'update']);
 Route::post('/change_admin_password', [App\Http\Controllers\AdminManagementController::class, 'changePassword']);
 
+//Announcement
+Route::get('/pages/announcement', [App\Http\Controllers\AnnouncementController::class, 'index']);
+Route::post('/create_announcement', [App\Http\Controllers\AnnouncementController::class, 'store']);
 
 //Contribution
 
 Route::get('/pages/rotationalcontribution', [App\Http\Controllers\ContributionController::class, 'rotationalcontribution']);
 Route::get('/pages/quickcontribution', [App\Http\Controllers\ContributionController::class, 'quickcontribution']);
 Route::get('/pages/crowdfundingcontribution', [App\Http\Controllers\ContributionController::class, 'crowdfundingcontribution']);
+
+Route::get('/pages/contribution/transactions/{groupID}', [App\Http\Controllers\ContributionController::class, 'groupTransactions'])->name('contribution_transactions');
+Route::get('/pages/contribution/members/{groupID}', [App\Http\Controllers\ContributionController::class, 'groupMembers'])->name('contribution_members');
+Route::get('/pages/crowdfundingcontribution/members/{groupID}', [App\Http\Controllers\ContributionController::class, 'crowdfundingGroupMembers'])->name('crowdfunding_contribution_members');
 
 //listmerchant
 Route::get('/pages/listmerchant', [App\Http\Controllers\MerchantController::class, 'listmerchant']);
@@ -51,3 +58,4 @@ Route::get('/billerModule/listBillMerchant', [App\Http\Controllers\BillerControl
 //complaint/listComplaint
 
 Route::get('/complaint/listComplaint', [App\Http\Controllers\ComplaintController::class, 'complaint']);
+Route::post('/update_complaint', [App\Http\Controllers\ComplaintController::class, 'update']);

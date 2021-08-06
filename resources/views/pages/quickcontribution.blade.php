@@ -104,7 +104,8 @@
                         <tr>
                             <td class="text-center">{{ $key+1 }}</td>
                             <td class="text-center">
-                               {{$contribution['groupname']}}
+                                <a href="{{route('contribution_transactions', ['groupID'=>$contribution['id']])}}">{{$contribution['groupname']}}</a>
+                               (<a href="{{route('contribution_members', ['groupID'=>$contribution['id']])}}">Group Members</a>)
                             </td>
                             <td class="text-center">
                                 {{$contribution['groupdecription']}}
